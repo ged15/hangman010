@@ -25,4 +25,20 @@ final class Game
     {
         return $this->revealedWord;
     }
+
+    public function tryLetter($letter)
+    {
+        $trySuccessful = false;
+
+        for ($i = 0; $i < strlen($this->word); $i++) {
+            if ($this->word[$i] === $letter) {
+                $this->revealedWord[$i] = $letter;
+                $trySuccessful = true;
+            }
+        }
+
+        if (!$trySuccessful) {
+            $this->guessesAvailable--;
+        }
+    }
 }

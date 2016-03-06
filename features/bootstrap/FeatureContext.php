@@ -50,4 +50,21 @@ class FeatureContext implements Context, SnippetAcceptingContext
     {
         Assert::assertEquals($revealedWord, $this->game->getRevealedWord());
     }
+
+    /**
+     * @Given a game has been started for the word :word
+     */
+    public function aGameHasBeenStartedForTheWord($word)
+    {
+        $this->dictionary->willProvide($word);
+        $this->game = Game::startUsingDictionary($this->dictionary);
+    }
+
+    /**
+     * @When I try the letter :letter
+     */
+    public function iTryTheLetter($letter)
+    {
+        $this->game->tryLetter($letter);
+    }
 }
