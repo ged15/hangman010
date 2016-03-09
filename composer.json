@@ -6,7 +6,10 @@
             "email": "g.sedbaras@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "silex/silex": "^1.3",
+        "twig/twig": "^1.24"
+    },
     "autoload": {
         "psr-0": {
             "": "src/"
@@ -14,6 +17,9 @@
     },
     "require-dev": {
         "behat/behat": "^3.0",
-        "phpunit/phpunit": "^5.2"
+        "phpunit/phpunit": "^5.2",
+        "behat/mink": "^1.7",
+        "behat/mink-extension": "^2.2",
+        "behat/mink-goutte-driver": "^1.2"
     }
 }

@@ -5,18 +5,20 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use PHPUnit_Framework_Assert as Assert;
+use Behat\MinkExtension\Context\MinkContext;
 
-class FeatureContext implements Context, SnippetAcceptingContext
+class WebFeatureContext extends MinkContext implements SnippetAcceptingContext
 {
-    private $dictionary;
+    private $dictionaryFile = __DIR__ . '/../../dictionary.data';
+    private $gameFile = __DIR__ . '/../../game.data';
 
-    /** @var Game */
-    private $game;
-
-    public function __construct()
+    /**
+     * @BeforeScenario
+     */
+    public function clearDataFiles()
     {
-        $this->dictionary = new PredictableDictionary();
+        @unlink($this->dictionaryFile);
+        @unlink($this->gameFile);
     }
 
     /**
@@ -24,7 +26,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function theDictionaryProvides($word)
     {
-        $this->dictionary->willProvide($word);
+        file_put_contents($this->dictionaryFile, $word);
     }
 
     /**
@@ -32,7 +34,8 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iStartAGameUsingTheDictionary()
     {
-        $this->game = Game::startUsingDictionary($this->dictionary);
+        $this->visit('/');
+        $this->pressButton('Start new game');
     }
 
     /**
@@ -40,7 +43,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function thereShouldBeGuessesAvailable($count)
     {
-        Assert::assertEquals($count, $this->game->getGuessesAvailable());
+        $this->assertElementContains('#guesses-available', $count);
     }
 
     /**
@@ -48,7 +51,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function theRevealedWordShouldBe($revealedWord)
     {
-        Assert::assertEquals($revealedWord, $this->game->getRevealedWord());
+        $this->assertElementContains('#revealed-word', $revealedWord);
     }
 
     /**
@@ -56,8 +59,9 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function aGameHasBeenStartedForTheWord($word)
     {
-        $this->dictionary->willProvide($word);
-        $this->game = Game::startUsingDictionary($this->dictionary);
+        file_put_contents(__DIR__ . '/../../dictionary.data', $word);
+
+        $this->iStartAGameUsingTheDictionary();
     }
 
     /**
@@ -65,6 +69,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iTryTheLetter($letter)
     {
-        $this->game->tryLetter($letter);
+        $this->fillField('Letter', $letter);
+        $this->pressButton('Try letter');
     }
 }

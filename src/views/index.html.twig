@@ -1,0 +1,16 @@
+<form action="/start_new_game" method="post">
+    <button>Start new game</button>
+</form>
+
+{% if game %}
+    <p id="guesses-available">{{ game.guessesAvailable }}</p>
+
+    <p id="revealed-word">{{ game.revealedWord }}</p>
+
+    <form action="/try_letter" method="post">
+        <label for="letter">Letter</label>
+        <input type="text" id="letter" name="letter">
+
+        <button>Try letter</button>
+    </form>
+{% endif %}

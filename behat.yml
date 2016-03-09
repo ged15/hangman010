@@ -1,0 +1,12 @@
+default:
+    suites:
+        domain:
+            contexts: [ FeatureContext ]
+        gui:
+            contexts: [ WebFeatureContext ]
+
+    extensions:
+        Behat\MinkExtension:
+            base_url: http://localhost:8000
+            sessions:
+                default: { goutte: ~ }
