@@ -9,4 +9,4 @@ default:
         Behat\MinkExtension:
             base_url: http://localhost:8000
             sessions:
-                default: { goutte: ~ }
+                default: { selenium2: ~ }
